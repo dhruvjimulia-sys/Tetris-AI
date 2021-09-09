@@ -1,28 +1,16 @@
-/*
-html, body {
-  height: 100%;
+body {
+  padding: 0;
+  margin: 0;
 }
 
-body {
-  margin: 0;
-  display: flex;
-
-  /* This centers our sketch horizontally.
-  justify-content: center;
-
-  /* This centers our sketch vertically.
-  align-items: center;
-}*/
-
 .center {
-    display:flex;
-    justify-content: center;
-
+  display: flex;
+  justify-content: center;
 }
 
 .right {
-    display:flex;
-    float: right;
+  display: flex;
+  float: right;
 }
 
 body {
