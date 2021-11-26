@@ -51,6 +51,7 @@ function helpDisplay() {
 
   textAlign(LEFT, TOP);
   textSize(floor(canvasWidth / 30));
+
   text(
     "This is a demonstration of AI learning to be better at the task of playing Tetris. Although initially the AI is likely to make terrible moves, eventually, it will learn from its mistakes and increase the high score.",
     boxSpacing + width / 16,

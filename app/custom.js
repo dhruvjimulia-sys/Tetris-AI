@@ -55,6 +55,7 @@ const customBlockSet1 = [
     [false, false, false, false],
   ],
 ];
+
 const customBlockSet2 = [
   [
     // Extended C-block
@@ -112,6 +113,7 @@ const customBlockSet2 = [
     [false, false, false, false],
   ],
 ];
+
 const customBlockSet3 = [
   [
     // Equalized L-block
@@ -169,12 +171,14 @@ const customBlockSet3 = [
     [false, false, false, false],
   ],
 ];
+
 let startCustomButton, customBackButton;
 let classicPreset, preset1, preset2, preset3;
 let blockDisplays;
 
 function customDisplay() {
-  let boxSpacing = width / 30;
+  const boxSpacing = width / 30;
+
   background(51);
   noFill();
   stroke(255);
@@ -187,12 +191,14 @@ function customDisplay() {
   } else {
     startCustomButton.text = "Start Custom Game";
   }
+
   startCustomButton.display();
   customBackButton.display();
   classicPreset.display();
   preset1.display();
   preset2.display();
   preset3.display();
+
   for (let i = 0; i < blockDisplays.length; i++) {
     blockDisplays[i].display(colours[i]);
   }
@@ -204,11 +210,12 @@ function BlockDisplay(x_, y_, size_, blockSet_) {
   this.y = y_;
   this.size = size_;
 
-  this.display = function (colour) {
+  this.display = (colour) => {
     noFill();
     stroke(255);
     strokeWeight(canvasWidth / 500);
     rect(this.x, this.y, this.size, this.size);
+
     for (let i = 0; i < this.blockSet.length; i++) {
       for (let j = 0; j < this.blockSet[0].length; j++) {
         let blockSize = this.size / 4;
@@ -225,7 +232,7 @@ function BlockDisplay(x_, y_, size_, blockSet_) {
     }
   };
 
-  this.setBlockSet = function (set) {
+  this.setBlockSet = (set) => {
     this.blockSet = set;
   };
 }
@@ -250,7 +257,7 @@ function PresetWidget(
   this.subtext = subtext_;
   this.spacing = spacing_;
 
-  this.mousePresent = function () {
+  this.mousePresent = () => {
     return (
       this.x < mouseX &&
       this.x + this.xsize > mouseX &&
@@ -259,7 +266,7 @@ function PresetWidget(
     );
   };
 
-  this.display = function () {
+  this.display = () => {
     if (this.mousePresent() && this.touchTime < touchResponse) {
       fill(175);
     } else if (this.selected) {
@@ -276,17 +283,21 @@ function PresetWidget(
     noStroke();
     fill(255);
     textAlign(CENTER, CENTER);
+
     text(
       this.text,
       this.x + this.xsize / 2,
       this.y + this.ysize / 2 - this.spacing
     );
+
     textSize(floor(canvasWidth / 40));
+
     text(
       this.subtext,
       this.x + this.xsize / 2,
       this.y + this.ysize / 2 + this.spacing
     );
+
     textAlign(LEFT, TOP);
   };
 

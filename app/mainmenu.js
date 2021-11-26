@@ -3,17 +3,20 @@ let aboutButton;
 let customButton;
 
 function displayMainMenu() {
-  let boxSpacing = width / 30;
+  const boxSpacing = width / 30;
+
   background(51);
   noFill();
   stroke(255);
   strokeWeight(3);
   textAlign(CENTER, CENTER);
+
   rect(boxSpacing, boxSpacing, width - 2 * boxSpacing, height - 2 * boxSpacing);
   noStroke();
   textFont("Arial");
   fill(255);
   textSize(floor(canvasWidth / 5));
+
   text("Tetris AI", width / 2, height / 3);
   textSize(floor(canvasWidth / 20));
   text(
@@ -57,6 +60,7 @@ function MenuWidget(x_, y_, xsize_, ysize_, text_, subtext_, spacing_) {
     } else {
       fill(51);
     }
+
     stroke(255);
     strokeWeight(canvasHeight / 300);
     rect(this.x, this.y, this.xsize, this.ysize);
@@ -65,10 +69,12 @@ function MenuWidget(x_, y_, xsize_, ysize_, text_, subtext_, spacing_) {
     fill(255);
     textAlign(CENTER, CENTER);
     textFont("Arial");
+
     let increment = 0;
     if (this.text == "Classic" || this.text == "Custom") {
       increment = height / 100;
     }
+
     text(
       this.text,
       this.x + this.xsize / 2,

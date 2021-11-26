@@ -30,6 +30,7 @@ function Widget(x_, y_, xsize_, ysize_, text_) {
     noStroke();
     fill(255);
     textAlign(CENTER, CENTER);
+
     text(this.text, this.x + this.xsize / 2, this.y + this.ysize / 2);
     textAlign(LEFT, TOP);
   };

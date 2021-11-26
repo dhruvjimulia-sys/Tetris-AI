@@ -69,10 +69,9 @@ const colours = [
 ];
 
 // Array to contain unique rotations of blocks
-// HEIGHT MUST BE 2*WIDTH
 let rotatedBlocks;
 const numCols = 10;
-const numRows = 20;
+const numRows = 2 * numCols;
 
 // Size of container settings
 let vertOffset, blockSpacing, start, end;
@@ -90,9 +89,17 @@ let dropSpeed, dropCount, dropThreshold;
 let endGame, score, level, totalLinesCleared, startCheck;
 
 // Genetic Algorithm values
-let maxHeightThreshold, currGeneration, currPlayer, mutationRate, maxGen, populat, populationSize, scoreMin, scoreMax;
+let maxHeightThreshold,
+  currGeneration,
+  currPlayer,
+  mutationRate,
+  maxGen,
+  populat,
+  populationSize,
+  scoreMin,
+  scoreMax;
 
-const font;
+let font;
 let fastMode;
 
 let trials;
@@ -114,7 +121,7 @@ let widgetSpace,
 let mainMenu, gamePlay, custom, about, help, aboutContent, helpContent;
 
 function preload() {
-  font = loadFont("consola.otf");
+  font = loadFont("assets/consola.otf");
 }
 
 function setup() {
@@ -125,6 +132,7 @@ function setup() {
     canvasWidth = windowWidth;
     canvasHeight = windowWidth * 1.21;
   }
+
   var canvas = createCanvas(canvasWidth, canvasHeight);
 
   canvas.parent("sketch-holder");
@@ -191,6 +199,7 @@ function setup() {
   touchResponse = 10;
   pause = true;
   infoDisplayWidgetSpacing = height / 15;
+
   backButton = new Widget(
     width / 20,
     height - widgetSpace + vertOffset,
@@ -198,6 +207,7 @@ function setup() {
     widgetSpace - 2 * vertOffset,
     "Back"
   );
+
   pauseResumeButton = new Widget(
     width / 15 + width / 6,
     height - widgetSpace + vertOffset,
@@ -205,6 +215,7 @@ function setup() {
     widgetSpace - 2 * vertOffset,
     "Start"
   );
+
   speedButton = new Widget(
     width * (1 / 2),
     height - widgetSpace + vertOffset,
@@ -212,6 +223,7 @@ function setup() {
     widgetSpace - 2 * vertOffset,
     "Increase Speed"
   );
+
   helpButton = new Widget(
     width * (85 / 100),
     height - widgetSpace + vertOffset,
@@ -229,6 +241,7 @@ function setup() {
     "Original Tetris pieces",
     height / 50
   );
+
   customButton = new MenuWidget(
     width * (55 / 100),
     height * (62 / 100),
@@ -238,6 +251,7 @@ function setup() {
     "Custom Tetris pieces",
     height / 50
   );
+
   aboutButton = new MenuWidget(
     width * (33.5 / 100),
     height * (76 / 100),
@@ -255,6 +269,7 @@ function setup() {
     height / 15,
     "Back"
   );
+
   startCustomButton = new Widget(
     width * (32 / 100),
     height - height / 5,
@@ -273,6 +288,7 @@ function setup() {
     "(For comparison)",
     height / 70
   );
+
   preset1 = new PresetWidget(
     width * 0.284,
     height / 6,
@@ -283,6 +299,7 @@ function setup() {
     "",
     0
   );
+
   preset2 = new PresetWidget(
     width * 0.502,
     height / 6,
@@ -293,6 +310,7 @@ function setup() {
     "",
     0
   );
+
   preset3 = new PresetWidget(
     width * 0.7207,
     height / 6,
@@ -311,6 +329,7 @@ function setup() {
     infoDisplayWidgetSpacing,
     "Back"
   );
+
   helpBackButton = new Widget(
     width / 15,
     height * (7 / 8),
@@ -329,6 +348,7 @@ function setup() {
     width * (27 / 45),
     width * (18 / 45),
   ];
+
   let blockDisplayY = [
     height * (7 / 24),
     height * (7 / 24),
@@ -338,6 +358,7 @@ function setup() {
     height * 0.45,
     height * 0.61,
   ];
+
   blockDisplays = new Array(7);
   for (let i = 0; i < blockDisplays.length; i++) {
     blockDisplays[i] = new BlockDisplay(
@@ -349,7 +370,13 @@ function setup() {
   }
 
   // Mainmenu
-  [mainMenu, gamePlay, startCheck, about, help] = [true, false, false, false, false];
+  [mainMenu, gamePlay, startCheck, about, help] = [
+    true,
+    false,
+    false,
+    false,
+    false,
+  ];
 
   // Info content
   aboutContent =
@@ -393,7 +420,6 @@ function draw() {
 
       if (fastMode) {
         if (dropCount % dropThreshold == 0) {
-
           // Falling blocks
           let testTetriType = int(random() * 7);
           let bMove = bestMove(testTetriType);
@@ -406,6 +432,7 @@ function draw() {
           // Clearing lines mechanic
           let numLinesClear = 0;
           let clearLineArray = clearLine(grid.grid);
+
           for (let i = 0; i < clearLineArray.length; i++) {
             if (clearLineArray[i]) {
               grid.removeRow(i);
@@ -418,6 +445,7 @@ function draw() {
           totalLinesCleared += numLinesClear;
           level = floor(totalLinesCleared / 10);
           score += 1;
+
           if (score > highScore) {
             highScore = score;
           }
@@ -461,15 +489,19 @@ function draw() {
     // Display grid
     background(51);
     grid.display();
+
     if (!fastMode && startCheck) {
       testTetri.display();
     }
+
     fill(255);
     textFont(font);
     noStroke();
     textSize(floor(canvasWidth / 20));
+
     trials = (currGeneration - 1) * populationSize + currPlayer;
     let offsetHeight = height - widgetSpace;
+
     text("Trials:", end + width / 20, offsetHeight / 6);
     text(trials, end + width / 20, offsetHeight / 6 + offsetHeight / 20);
     text(
@@ -492,7 +524,6 @@ function draw() {
       end + width / 20,
       offsetHeight * (2 / 3) + offsetHeight / 20 - offsetHeight / 25
     );
-    // text("Level:" + level, end + width/30, offsetHeight * (2/3) + offsetHeight * (1/30));
     text("Lines", end + width / 20, offsetHeight * (5 / 6));
     text(
       "Cleared:",
@@ -603,8 +634,8 @@ function Grid() {
 
   this.getGridValue = (i, j) => this.grid[i][j];
 
-  this.removeRow = rowNum => {
-    newGrid = this.grid.map(val => {
+  this.removeRow = (rowNum) => {
+    newGrid = this.grid.map((val) => {
       val2 = val.slice(0, rowNum);
       val3 = val.slice(rowNum + 1);
       return val2.concat(val3);
@@ -616,9 +647,7 @@ function Grid() {
   };
 }
 
-
 function Tetrimino(type) {
-
   this.type = type;
   this.rotations = rotatedBlocks[type];
   this.coordinates = [];
@@ -729,26 +758,28 @@ function Tetrimino(type) {
     }
   };
 
-  this.setLocation = locX => this.locX = locX;
+  this.setLocation = (locX) => (this.locX = locX);
 
-  this.setDirection = direct => {
+  this.setDirection = (direct) => {
     this.currentDirection = direct;
     this.locY = numRows - 2;
   };
 
-  this.getXlocation = () => this.locX
+  this.getXlocation = () => this.locX;
 
-  this.getCurrentDirection = () => this.currentDirection
+  this.getCurrentDirection = () => this.currentDirection;
 }
 
-// Assumes a lot of things specific to this program
+// Optimized for this program
 function are2DArrayEqual(arr1, arr2) {
   if (arr1.length != arr2.length) {
     return false;
   }
+
   if (arr1[0].length != arr2[0].length) {
     return false;
   }
+
   let equ = true;
   for (let i = 0; i < arr1.length; i++) {
     for (let j = 0; j < arr1[0].length; j++) {
@@ -758,9 +789,9 @@ function are2DArrayEqual(arr1, arr2) {
       }
     }
   }
+
   return equ;
 }
-
 
 function TypeTetrimino(cells) {
   this.cells = cells;
@@ -769,18 +800,21 @@ function TypeTetrimino(cells) {
   this.getDirections = () => {
     directions = [];
     let matrix = this.squareSnip(this.cells);
+
     for (let i = 0; i < this.numDirections; i++) {
       directions.push(this.rectSnip(matrix));
       matrix = this.rotate(matrix);
     }
+
     return directions;
   };
 
   this.getNumDirections = () => this.numDirections;
 
-  this.calculateNumDirections = () => this.numDirections = this.numDirect(this.cells);
+  this.calculateNumDirections = () =>
+    (this.numDirections = this.numDirect(this.cells));
 
-  this.rotate = matrix => {
+  this.rotate = (matrix) => {
     let squareSnipped = this.squareSnip(matrix);
     let size = squareSnipped.length;
 
@@ -802,13 +836,13 @@ function TypeTetrimino(cells) {
     return rotated;
   };
 
-  this.rectSnip = matrix => {
+  this.rectSnip = (matrix) => {
     let rectSnipBlock = matrix;
     let colSnipped = this.colSnipLeft(this.colSnipRight(rectSnipBlock));
     return this.rowSnipUp(this.rowSnipDown(colSnipped));
   };
 
-  this.colSnipRight = rectSnip => {
+  this.colSnipRight = (rectSnip) => {
     let colSnip = true;
 
     for (let i = 0; i < rectSnip.length; i++) {
@@ -827,13 +861,15 @@ function TypeTetrimino(cells) {
     }
   };
 
-  this.colSnipLeft = rectSnip => {
+  this.colSnipLeft = (rectSnip) => {
     let colSnip = true;
+
     for (let i = 0; i < rectSnip.length; i++) {
       if (rectSnip[i][0]) {
         colSnip = false;
       }
     }
+
     if (colSnip) {
       newRectSnip = rectSnip.map(function (val) {
         return val.slice(1);
@@ -844,13 +880,15 @@ function TypeTetrimino(cells) {
     }
   };
 
-  this.rowSnipDown = rectSnip => {
+  this.rowSnipDown = (rectSnip) => {
     let colSnip = true;
+
     for (let i = 0; i < rectSnip[0].length; i++) {
       if (rectSnip[rectSnip.length - 1][i]) {
         colSnip = false;
       }
     }
+
     if (colSnip) {
       let newRectSnip = rectSnip.slice(0, -1);
       return this.rowSnipDown(newRectSnip);
@@ -859,13 +897,15 @@ function TypeTetrimino(cells) {
     }
   };
 
-  this.rowSnipUp = rectSnip => {
+  this.rowSnipUp = (rectSnip) => {
     let colSnip = true;
+
     for (let i = 0; i < rectSnip[0].length; i++) {
       if (rectSnip[0][i]) {
         colSnip = false;
       }
     }
+
     if (colSnip) {
       let newRectSnip = rectSnip.slice(1);
       return this.rowSnipUp(newRectSnip);
@@ -874,8 +914,9 @@ function TypeTetrimino(cells) {
     }
   };
 
-  this.squareSnip = matrix => {
+  this.squareSnip = (matrix) => {
     let rectSnipped = this.rectSnip(matrix);
+
     if (rectSnipped.length > rectSnipped[0].length) {
       let increment = rectSnipped.length - rectSnipped[0].length;
       for (let inc = 0; inc < increment; inc++) {
@@ -891,6 +932,7 @@ function TypeTetrimino(cells) {
         rectSnipped.push(temp);
       }
     }
+
     return rectSnipped;
   };
 
@@ -1023,9 +1065,9 @@ function TempGridCalculator() {
     return holeCounter;
   };
 
-  this.maxHeight = cellGrid => max(calcMaxHeight(cellGrid));
+  this.maxHeight = (cellGrid) => max(calcMaxHeight(cellGrid));
 
-  this.numberOfClearedLines = cellGrid => {
+  this.numberOfClearedLines = (cellGrid) => {
     let counter = 0;
     let arr = clearLine(cellGrid);
     for (let i = 0; i < arr.length; i++) {
@@ -1055,7 +1097,7 @@ function TempGridCalculator() {
     return avgChange;
   };
 
-  this.numberOfEdgesTouchingWall = coordinates => {
+  this.numberOfEdgesTouchingWall = (coordinates) => {
     let counter = 0;
     for (let i = 0; i < coordinates.length; i++) {
       if (coordinates[i][0] == 0 || coordinates[i][0] == numCols - 1) {
@@ -1079,7 +1121,10 @@ function TempGridCalculator() {
       ];
 
       for (let j = 0; j < neighbours.length; j++) {
-        if (this.isInGrid(neighbours[j]) && grid.grid[neighbours[j][0]][neighbours[j][1]] != -1) {
+        if (
+          this.isInGrid(neighbours[j]) &&
+          grid.grid[neighbours[j][0]][neighbours[j][1]] != -1
+        ) {
           counter++;
         }
       }
@@ -1097,7 +1142,8 @@ function TempGridCalculator() {
     return counter;
   };
 
-  this.isInGrid = arr => arr[0] >= 0 && arr[0] < numCols && arr[1] >= 0 && arr[1] < numRows;
+  this.isInGrid = (arr) =>
+    arr[0] >= 0 && arr[0] < numCols && arr[1] >= 0 && arr[1] < numRows;
 }
 
 function calcMaxHeight(cellGrid) {
@@ -1157,11 +1203,14 @@ function clearLine(cellGrid) {
 function addToScoreOnLinesClear(numLines) {
   switch (numLines) {
     case 1:
-      score += 40 * (level + 1); break;
+      score += 40 * (level + 1);
+      break;
     case 2:
-      score += 100 * (level + 1); break;
+      score += 100 * (level + 1);
+      break;
     case 3:
-      score += 300 * (level + 1); break;
+      score += 300 * (level + 1);
+      break;
     case 4:
       score += 1200 * (level + 1);
   }
@@ -1279,7 +1328,7 @@ function Population() {
 
   this.getPopulation = () => this.population;
 
-  this.setPopulation = pop => this.population = pop;
+  this.setPopulation = (pop) => (this.population = pop);
 }
 
 function moveToTarget(curr, tar, tetrimino) {
@@ -1514,9 +1563,16 @@ function fillRotatedBlocks(blocks) {
 }
 
 function initializeGame() {
-
   // Initialize game variables
-  [score, level, totalLinesCleared, highScore, trials, currGeneration, currPlayer] = [0, 0, 0, 0, 0, 1, 0];
+  [
+    score,
+    level,
+    totalLinesCleared,
+    highScore,
+    trials,
+    currGeneration,
+    currPlayer,
+  ] = [0, 0, 0, 0, 0, 1, 0];
   populat = new Population();
 
   // Boolean variables initialization
